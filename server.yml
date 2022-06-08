@@ -14,6 +14,22 @@ Parameters:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
 
+  PrivSubNet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private Subnet in the first Availability Zone
+    Type: String
+
+  PrivSubNet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the private Subnet in the second Availability Zone
+    Type: String
+
+  PubSubNet1CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public Subnet in the first Availability Zone
+    Type: String
+
+  PubSubNet2CIDR:
+    Description: Please enter the IP range (CIDR notation) for the public Subnet in the second Availability Zone
+    Type: String
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -23,3 +39,47 @@ Resources:
       Tags:
         - Key: name
           Value: !Ref EnvironmentName
+
+  PrivSubNet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: !Ref PrivSubNet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+
+  PrivSubNet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Ref PrivSubNet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
+
+  PubSubNet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: !Ref PubSubNet1CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
+
+  PrivSubNet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Ref PrivSubNet2CIDR
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: name
+          Value: !Sub ${EnvironmentName} Public Subnet (AZ2)
