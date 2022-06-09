@@ -14,19 +14,19 @@ Parameters:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
 
-  PrivSubNet1CIDR:
+  PrivSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the private Subnet in the first Availability Zone
     Type: String
 
-  PrivSubNet2CIDR:
+  PrivSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the private Subnet in the second Availability Zone
     Type: String
 
-  PubSubNet1CIDR:
+  PubSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the public Subnet in the first Availability Zone
     Type: String
 
-  PubSubNet2CIDR:
+  PubSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the public Subnet in the second Availability Zone
     Type: String
 
@@ -40,45 +40,45 @@ Resources:
         - Key: name
           Value: !Ref EnvironmentName
 
-  PrivSubNet1:
+  PrivSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !Ref PrivSubNet1CIDR
+      CidrBlock: !Ref PrivSubnet1CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: name
           Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
 
-  PrivSubNet2:
+  PrivSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PrivSubNet2CIDR
+      CidrBlock: !Ref PrivSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: name
           Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
 
-  PubSubNet1:
+  PubSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [0, !GetAZs ""]
-      CidrBlock: !Ref PubSubNet1CIDR
+      CidrBlock: !Ref PubSubnet1CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: name
           Value: !Sub ${EnvironmentName} Public Subnet (AZ1)
 
-  PubSubNet2:
+  PubSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PubSubNet2CIDR
+      CidrBlock: !Ref PubSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
         - Key: name
@@ -113,13 +113,13 @@ Resources:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatGateway1EIP.AllocationId
-      SubnetId: !Ref PubSubNet1
+      SubnetId: !Ref PubSubnet1
 
   NatGateway2:
     Type: AWS::EC2::NatGateway
     Properties:
       AllocationId: !GetAtt NatGateway2EIP.AllocationId
-      SubnetId: !Ref PubSubNet2
+      SubnetId: !Ref PubSubnet2
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -137,17 +137,17 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
-  PubSubNet1RouteTableAssociation:
+  PubSubnet1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PubSubNet1
+      SubnetId: !Ref PubSubnet1
 
-  PubSubNet2RouteTableAssociation:
+  PubSubnet2RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PubSubNet2
+      SubnetId: !Ref PubSubnet2
 
   PrivateRouteTable1:
     Type: AWS::EC2::RouteTable
@@ -164,11 +164,11 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway1
 
-  PrivSubNet1RouteTableAssociation:
+  PrivSubnet1RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTable1
-      SubnetId: !Ref PrivSubNet1
+      SubnetId: !Ref PrivSubnet1
 
   PrivateRouteTable2:
     Type: AWS::EC2::RouteTable
@@ -185,8 +185,8 @@ Resources:
       DestinationCidrBlock: 0.0.0.0/0
       NatGatewayId: !Ref NatGateway2
 
-  PrivSubNet2RouteTableAssociation:
+  PrivSubnet2RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
-      SubnetId: !Ref PrivSubNet2
+      SubnetId: !Ref PrivSubnet2
