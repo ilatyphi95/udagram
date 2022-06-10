@@ -258,8 +258,8 @@ Resources:
         - !Ref PrivSubnet2
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
-      MinSize: "2"
-      MaxSize: "4"
+      MinSize: "1"
+      MaxSize: "2"
       TargetGroupARNs:
         - Ref: WebAppTargetGroup
 
@@ -271,7 +271,7 @@ Resources:
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 8
       HealthyThresholdCount: 2
-      Port: 8080
+      Port: 80
       Protocol: HTTP
       UnhealthyThresholdCount: 5
       VpcId: !Ref VPC
@@ -294,7 +294,7 @@ Resources:
             Ref: WebAppTargetGroup
       LoadBalancerArn:
         Ref: WebAppLB
-      Port: "80"
+      Port: 80
       Protocol: HTTP
   ALBListenerRule:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule

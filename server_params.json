@@ -25,7 +25,7 @@
 	},
     {
 		"ParameterKey": "AmiId",
-		"ParameterValue": "ami-0022f774911c1d690"
+		"ParameterValue": "ami-09d56f8956ab235b3"
 	},
     {
 		"ParameterKey": "KeyPairName",
