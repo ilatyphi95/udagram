@@ -288,8 +288,8 @@ Resources:
         - !Ref PrivSubnet2
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
-      MinSize: "1"
-      MaxSize: "2"
+      MinSize: "4"
+      MaxSize: "6"
       TargetGroupARNs:
         - Ref: WebAppTargetGroup
 
