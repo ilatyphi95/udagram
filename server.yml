@@ -198,6 +198,35 @@ Resources:
     Properties:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivSubnet2
+  # Role to allow EC2 access the S3 bucket
+  RoleForS3Access:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: AmazonS3FullAccess
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:*"
+                  - "s3-object-lambda:*"
+                Resource: "*"
+  # Instance Profile
+  ServerInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Roles:
+        - !Ref RoleForS3Access
 
   LBSecGroup:
     Type: AWS::EC2::SecurityGroup
@@ -245,6 +274,7 @@ Resources:
       SecurityGroups:
         - Ref: WebServerSecGroup
       InstanceType: t3.medium
+      IamInstanceProfile: !Ref ServerInstanceProfile
       BlockDeviceMappings:
         - DeviceName: "/dev/sdk"
           Ebs:
