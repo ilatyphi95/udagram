@@ -38,6 +38,10 @@ Parameters:
     Description: Key pair name
     Type: String
 
+  MyBucketName:
+    Description: Key pair name
+    Type: String
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -260,6 +264,10 @@ Resources:
           ToPort: 65535
           CidrIp: 0.0.0.0/0
 
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref MyBucketName
   WebAppLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
