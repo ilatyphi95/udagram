@@ -28,10 +28,6 @@
 		"ParameterValue": "ami-09d56f8956ab235b3"
 	},
     {
-		"ParameterKey": "KeyPairName",
-		"ParameterValue": "my_server_key"
-	},
-    {
 		"ParameterKey": "MyBucketName",
 		"ParameterValue": "my576667657875serverbucket"
 	}

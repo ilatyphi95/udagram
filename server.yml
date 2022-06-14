@@ -34,10 +34,6 @@ Parameters:
     Description: AMI-ID of teh chosen machine
     Type: String
 
-  KeyPairName:
-    Description: Key pair name
-    Type: String
-
   MyBucketName:
     Description: Key pair name
     Type: String
@@ -278,7 +274,6 @@ Resources:
           sudo apt-get install apache2 -y
           sudo systemctl start apache2.service
       ImageId: !Ref AmiId
-      KeyName: !Ref KeyPairName
       SecurityGroups:
         - Ref: WebServerSecGroup
       InstanceType: t3.medium
@@ -345,3 +340,10 @@ Resources:
           Values: [/]
       ListenerArn: !Ref "Listener"
       Priority: 1
+
+Outputs:
+  WebAppLoadBalancerURL:
+    Description: Public URL of the Load Balancer
+    Value: !Join ["", ["http://", !GetAtt WebAppLB.DNSName]]
+    Export:
+      Name: !Sub ${EnvironmentName}-LoadBalancer-URL
