@@ -34,10 +34,6 @@ Parameters:
     Description: AMI-ID of teh chosen machine
     Type: String
 
-  MyBucketName:
-    Description: Key pair name
-    Type: String
-
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -260,10 +256,6 @@ Resources:
           ToPort: 65535
           CidrIp: 0.0.0.0/0
 
-  S3Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Ref MyBucketName
   WebAppLaunchConfig:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
@@ -271,8 +263,13 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           sudo apt-get update -y
+          apt-get install unzip awscli -y
           sudo apt-get install apache2 -y
           sudo systemctl start apache2.service
+          cd /var/www/html
+          sudo rm index.html
+          aws s3 cp s3://test576667657875/index.html index.html
+          sudo systemctl restart apache2.service
       ImageId: !Ref AmiId
       SecurityGroups:
         - Ref: WebServerSecGroup
